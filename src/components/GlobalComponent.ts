@@ -17,7 +17,13 @@ export class GlobalComponent extends BaseComponent {
     await this.$send({ message: 'hello.' });
 
     return this.$delegate(LoveHatePizzaComponent, {
-      resolve: {},
+      resolve: {
+        fail: this.Fail,
+      },
     });
+  }
+
+  Fail() {
+    return this.$send({ message: 'No worries. Me neither.' });
   }
 }

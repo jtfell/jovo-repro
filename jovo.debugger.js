@@ -21,6 +21,12 @@ const debuggerConfig = new DebuggerConfig({
         intent: 'NoIntent',
       },
     },
+    {
+      label: 'No Good',
+      input: {
+        intent: 'NoGoodIntent',
+      },
+    },
     // ...
   ],
 });

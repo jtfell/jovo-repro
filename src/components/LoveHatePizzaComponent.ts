@@ -1,4 +1,4 @@
-import { Component, BaseComponent, Intents } from '@jovotech/framework';
+import { Component, BaseComponent, Intents, PrioritizedOverUnhandled } from '@jovotech/framework';
 
 import { YesNoOutput } from '../output/YesNoOutput';
 import { YesNoComponent } from '../components/YesNoComponent';
@@ -15,14 +15,14 @@ import { YesNoComponent } from '../components/YesNoComponent';
 @Component({ components: [YesNoComponent] })
 export class LoveHatePizzaComponent extends BaseComponent {
   async START() {
-    // Send a message up front
-    await this.$send(YesNoOutput, { message: 'First message' });
-    await this.$send({ message: 'Second message' });
-
     return this.$delegate(YesNoComponent, {
-      resolve: {},
+      resolve: {
+        yes: this.lovesPizza,
+      },
       config: {
-        value: null,
+        outputOpts: {
+          message: 'Do you like pizza?',
+        },
       },
     });
   }
@@ -31,8 +31,10 @@ export class LoveHatePizzaComponent extends BaseComponent {
     return this.$send({ message: 'Yes! I love pizza, too.', listen: false });
   }
 
+  @Intents(['NoGoodIntent'])
+  @PrioritizedOverUnhandled()
   hatesPizza() {
-    return this.$send({ message: `That's OK! Not everyone likes pizza.`, listen: false });
+    return this.$resolve('fail');
   }
 
   UNHANDLED() {
